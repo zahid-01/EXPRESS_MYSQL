@@ -1,5 +1,12 @@
 const pool = require("../Config/database");
 
+const sendResponse = (res, status, message, rows = null) => {
+  res.status(status).json({
+    message,
+    rows: rows || null,
+  });
+};
+
 //Create
 exports.createUser = async (req, res) => {
   const { email, password, username } = req.body;
@@ -10,11 +17,13 @@ exports.createUser = async (req, res) => {
     });
 
   const query = `INSERT INTO clients (username,email, password) VALUES (?,?,?)`;
-  const result = pool.query(query, [username, email, password]);
-
-  res.status(200).json({
-    result,
-  });
+  const result = pool.query(
+    query,
+    [username, email, password],
+    (err, rows, fields) => {
+      sendResponse(res, 200, "User Created", rows);
+    }
+  );
 };
 
 //READ all users
@@ -22,10 +31,7 @@ exports.getAllUsers = async (req, res) => {
   const query = `select * from clients`;
   let result;
   pool.query(query, (err, rows, fields) => {
-    result = rows;
-    res.status(200).json({
-      result,
-    });
+    sendResponse(res, 200, { count: rows.length }, rows);
   });
 };
 
@@ -38,9 +44,7 @@ exports.updateUser = async (req, res) => {
     if (err) {
       console.log(err);
     }
-    res.status(200).json({
-      rows,
-    });
+    sendResponse(res, 200, "User updated", rows);
   });
 };
 
@@ -53,8 +57,6 @@ exports.deleteUser = async (req, res) => {
     if (err) {
       console.log(err);
     }
-    res.status(200).json({
-      rows,
-    });
+    sendResponse(res, 200, "User deleted", rows);
   });
 };
