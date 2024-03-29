@@ -4,8 +4,8 @@ async function createDatabaseAndTableIfNotExists(databaseName) {
   const pool = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "password",
-    database: null, // Do not specify a default database
+    password: "helloworld",
+    database: null,
   });
 
   try {
@@ -15,7 +15,6 @@ async function createDatabaseAndTableIfNotExists(databaseName) {
       [databaseName]
     );
 
-    // If the database doesn't exist, create it
     if (rows.length === 0) {
       await pool.query(`CREATE DATABASE ${databaseName}`);
       console.log(`Database '${databaseName}' created successfully.`);
@@ -25,11 +24,10 @@ async function createDatabaseAndTableIfNotExists(databaseName) {
     const db = await mysql.createConnection({
       host: "localhost",
       user: "root",
-      password: "password",
+      password: "helloworld",
       database: databaseName,
     });
 
-    // Create a table in the database
     const createTableQuery = `
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -50,5 +48,4 @@ async function createDatabaseAndTableIfNotExists(databaseName) {
   }
 }
 
-// Usage
-createDatabaseAndTableIfNotExists("your_database_name");
+module.exports = createDatabaseAndTableIfNotExists;

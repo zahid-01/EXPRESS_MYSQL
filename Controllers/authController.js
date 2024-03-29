@@ -1,3 +1,4 @@
+const createDatabaseAndTableIfNotExists = require("../Config/createDB");
 const pool = require("../Config/database");
 
 exports.signup = async (req, res) => {
@@ -9,6 +10,7 @@ exports.signup = async (req, res) => {
       console.log("User Exists");
     } else {
       console.log("User does not exists");
+      createDatabaseAndTableIfNotExists(email.split("@")[0]);
     }
     res.status(200).json({
       rows,
