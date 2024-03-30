@@ -38,12 +38,10 @@ async function createDatabaseAndTableIfNotExists(databaseName) {
     await db.query(createTableQuery);
     console.log(`Table 'users' created successfully.`);
 
-    // Close the connection
     await db.end();
   } catch (error) {
     console.error("Error:", error.message);
   } finally {
-    // Close the pool
     await pool.end();
   }
 }
