@@ -3,7 +3,7 @@ const mysql = require("mysql2");
 exports.getPool = (dbname) => {
   const pool = mysql.createPool({
     host: process.env.HOST,
-    user: process.env.USER,
+    user: process.env.DB_USER,
     password: process.env.PASSWORD,
     database: dbname,
     waitForConnections: true,

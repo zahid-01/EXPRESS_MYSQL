@@ -5,6 +5,7 @@ const {
   getAllUsers,
   updateUser,
   deleteUser,
+  clientSignup,
 } = require("../Controllers/clientController");
 
 ClientRouter.route("/")
@@ -13,4 +14,5 @@ ClientRouter.route("/")
   .patch(updateUser)
   .delete(deleteUser);
 
+ClientRouter.route("/client").post(clientSignup);
 module.exports = ClientRouter;

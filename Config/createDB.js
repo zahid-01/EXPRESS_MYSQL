@@ -3,7 +3,7 @@ const mysql = require("mysql2/promise");
 async function createDatabaseAndTableIfNotExists(databaseName) {
   const pool = mysql.createPool({
     host: process.env.HOST,
-    user: process.env.USER,
+    user: process.env.DB_USER,
     password: process.env.PASSWORD,
     database: null,
   });
@@ -22,9 +22,9 @@ async function createDatabaseAndTableIfNotExists(databaseName) {
 
     // Create a connection to the specific database
     const db = await mysql.createConnection({
-      host: process.env.HOST,
-      user: process.env.USER,
-      password: process.env.PASSWORD,
+      host: "localhost",
+      user: "root",
+      password: "helloworld",
       database: databaseName,
     });
 

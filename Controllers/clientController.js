@@ -1,4 +1,5 @@
 const pool = require("../Config/database");
+const { getPool } = require("../Config/clientDb");
 
 const sendResponse = (res, status, message, rows = null) => {
   res.status(status).json({
@@ -9,18 +10,19 @@ const sendResponse = (res, status, message, rows = null) => {
 
 //Create
 exports.createUser = async (req, res) => {
-  const { email, password, username } = req.body;
+  const { email, password, username, organisationName } = req.body;
 
   if (!email || !password)
     return res.status(200).json({
       message: "Provide all the details",
     });
 
-  const query = `INSERT INTO clients (username,email, password) VALUES (?,?,?)`;
-  const result = pool.query(
+  const query = `INSERT INTO clients (username,email, password,organisationName) VALUES (?,?,?,?)`;
+  pool.query(
     query,
-    [username, email, password],
+    [username, email, password, organisationName],
     (err, rows, fields) => {
+      if (err) console.log(err);
       sendResponse(res, 200, "User Created", rows);
     }
   );
@@ -58,5 +60,17 @@ exports.deleteUser = async (req, res) => {
       console.log(err);
     }
     sendResponse(res, 200, "User deleted", rows);
+  });
+};
+
+exports.clientSignup = async (req, res) => {
+  const { orgName, email, username } = req.body;
+
+  const pool = getPool(orgName);
+
+  const query = `INSERT INTO clients (email, username) VALUES (?,?)`;
+  pool.query(query, [email, username], (err, rows, fields) => {
+    if (err) console.log(err);
+    sendResponse(res, 200, "User Created", rows);
   });
 };
