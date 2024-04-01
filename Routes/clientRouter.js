@@ -15,5 +15,6 @@ ClientRouter.route("/")
   .patch(updateUser)
   .delete(deleteUser);
 
-ClientRouter.route("/client").post(protect, clientSignup);
+ClientRouter.use(protect);
+ClientRouter.route("/client").post(clientSignup);
 module.exports = ClientRouter;

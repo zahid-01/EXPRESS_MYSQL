@@ -1,6 +1,6 @@
 const createDatabaseAndTableIfNotExists = require("../Config/createDB");
-const pool = require("../Config/database");
 const { getPool } = require("../Config/clientDb");
+const poolMaster = require("../Config/database");
 
 const sendResponse = (res, status, message, rows = null) => {
   res.status(status).json({
@@ -11,6 +11,7 @@ const sendResponse = (res, status, message, rows = null) => {
 
 //Create
 const createOrganisation = (creds) => {
+  const pool = poolMaster();
   const { email, password, username, organisationName } = creds;
   console.log(username, email, password, organisationName);
   const query = `INSERT INTO clients (username,email, password,organisationName, isSubscribed) VALUES (?,?,?,?,?)`;
@@ -27,7 +28,7 @@ const createOrganisation = (creds) => {
 exports.signup = async (req, res) => {
   const { email, password, username, organisationName } = req.body;
   const query = `SELECT EXISTS(SELECT 1 FROM clients WHERE email = '${email}') AS userExists`;
-
+  const pool = poolMaster();
   pool.query(query, (err, rows, fields) => {
     if (rows && rows[0].userExists) {
       sendResponse(res, 403, "Organisation Exists");
