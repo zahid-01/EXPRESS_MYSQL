@@ -1,5 +1,6 @@
 const ClientRouter = require("express").Router();
 
+const { protect } = require("../Controllers/authController");
 const {
   createUser,
   getAllUsers,
@@ -14,5 +15,5 @@ ClientRouter.route("/")
   .patch(updateUser)
   .delete(deleteUser);
 
-ClientRouter.route("/client").post(clientSignup);
+ClientRouter.route("/client").post(protect, clientSignup);
 module.exports = ClientRouter;

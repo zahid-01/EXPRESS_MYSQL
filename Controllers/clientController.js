@@ -64,9 +64,9 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.clientSignup = async (req, res) => {
-  const { orgName, email, username } = req.body;
+  const { orgName: org, email, username } = req.body;
 
-  const pool = getPool(orgName);
+  const pool = getPool(org);
 
   const query = `INSERT INTO clients (email, username) VALUES (?,?)`;
   pool.query(query, [email, username], (err, rows, fields) => {
