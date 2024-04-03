@@ -54,7 +54,7 @@ exports.signup = async (req, res) => {
 exports.login = async (req, res, next) => {
   const baseUri = "https://accounts.google.com/o/oauth2/auth";
   const options = {
-    redirect_uri: "http://localhost:6000/api/v1/auth/oauth",
+    redirect_uri: "http://localhost:8000/api/v1/auth/google/oauth",
     client_id: process.env.CLIENT_ID,
     access_type: "offline",
     response_type: "code",
@@ -72,6 +72,13 @@ exports.login = async (req, res, next) => {
     message: "OAuth",
     uri,
   });
+};
+
+//OAuth Callback
+exports.callbackOAuth = async (req, res) => {
+  console.log(req.query);
+
+  res.status(200).json({ message: "HI" });
 };
 
 //Protect

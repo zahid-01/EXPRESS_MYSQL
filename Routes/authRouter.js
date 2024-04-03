@@ -1,8 +1,12 @@
 const AuthRouter = require("express").Router();
 
-const { signup, login } = require("../Controllers/authController");
+const {
+  signup,
+  login,
+  callbackOAuth,
+} = require("../Controllers/authController");
 
-AuthRouter.post("/oauth", login);
+AuthRouter.route("/oauth").post(login).get(callbackOAuth);
 AuthRouter.post("/signup", signup);
 
 module.exports = AuthRouter;
