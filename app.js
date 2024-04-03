@@ -11,5 +11,6 @@ app.use(express.json());
 
 app.use("/api/v1/users", ClientRouter);
 app.use("/api/v1/auth", AuthRouter);
+app.use("/api/v1/auth/google", AuthRouter);
 
 module.exports = app;

@@ -1,6 +1,6 @@
 const createDatabaseAndTableIfNotExists = require("../Config/createDB");
-const { getPool } = require("../Config/clientDb");
 const poolMaster = require("../Config/database");
+const { google } = require("googleapis");
 
 const sendResponse = (res, status, message, rows = null) => {
   res.status(status).json({
@@ -25,6 +25,7 @@ const createOrganisation = (creds) => {
   );
 };
 
+//Signup
 exports.signup = async (req, res) => {
   const { email, password, username, organisationName } = req.body;
   const query = `SELECT EXISTS(SELECT 1 FROM clients WHERE email = '${email}') AS userExists`;
@@ -49,6 +50,31 @@ exports.signup = async (req, res) => {
   });
 };
 
+//Login
+exports.login = async (req, res, next) => {
+  const baseUri = "https://accounts.google.com/o/oauth2/auth";
+  const options = {
+    redirect_uri: "http://localhost:6000/api/v1/auth/oauth",
+    client_id: process.env.CLIENT_ID,
+    access_type: "offline",
+    response_type: "code",
+    prompt: "consent",
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
+    ].join(" "),
+  };
+
+  const quer = new URLSearchParams(options);
+
+  const uri = `${baseUri}?${quer.toString()}`;
+  res.status(200).json({
+    message: "OAuth",
+    uri,
+  });
+};
+
+//Protect
 exports.protect = (req, res, next) => {
   const { orgName } = req.body;
 
