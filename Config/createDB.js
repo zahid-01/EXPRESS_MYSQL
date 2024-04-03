@@ -2,9 +2,9 @@ const mysql = require("mysql2/promise");
 
 async function createDatabaseAndTableIfNotExists(databaseName) {
   const pool = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "helloworld",
+    host: process.env.HOST,
+    user: process.env.DB_USER,
+    password: process.env.PASSWORD,
     database: null,
   });
 
@@ -29,14 +29,14 @@ async function createDatabaseAndTableIfNotExists(databaseName) {
     });
 
     const createTableQuery = `
-            CREATE TABLE IF NOT EXISTS users (
+            CREATE TABLE IF NOT EXISTS clients (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 username VARCHAR(255) NOT NULL,
                 email VARCHAR(255) NOT NULL UNIQUE
             )
         `;
     await db.query(createTableQuery);
-    console.log(`Table 'users' created successfully.`);
+    console.log(`Table 'clients' created successfully.`);
 
     await db.end();
   } catch (error) {
